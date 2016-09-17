@@ -4,22 +4,31 @@ import scala.util.Try
 
 
 object StringCommon extends App {
-  def longest(words: String) = extractWords(words)(doLongest)
-  def commonest(words: String) = extractWords(words)(doCommonest)
 
-  def doLongest(words: Traversable[String]) =
-    words.foldLeft(0)((max, w) => if (max < w.length) w.length else max)
+  object FromString {
+    def longest(words: String) = extractWords(words)(FromTraversable.longest)
+    def commonestWord(words: String) = extractWords(words)(FromTraversable.commonestWord)
+    def commonestLetter(words: String) = extractWords(words)(FromTraversable.commonestLetter)
+  }
 
-  def doCommonest(words: Traversable[String]) = {
-    val hist = words.foldLeft(Map[String, Int]())((map, w) => {
-                                                    val n = Try(map(w)).getOrElse(0)
-                                                    map + (w -> (n + 1))
-                                                  })
-    val maxKv = hist.foldLeft(("", 0))((max , kv) => if (max._2 < kv._2) kv else max)
+  object FromTraversable {
+    def longest(words: Traversable[String]) =
+      words.foldLeft(0)((max, w) => if (max < w.length) w.length else max)
+
+    def commonestWord(words: Traversable[String]) = commonestItem("")(words)
+
+    def commonestLetter(words: Traversable[String]) =
+      commonestItem(' ')(words.flatMap(w => w.map(c => c)))
+  }
+
+  def commonestItem[E](zero: E)(items: Traversable[E]) = {
+    val hist = items.foldLeft(Map[E, Int]())((map, w) => {
+                                               val n = Try(map(w)).getOrElse(0)
+                                               map + (w -> (n + 1))
+                                             })
+    val maxKv = hist.foldLeft(zero -> 0)((max , kv) => if (max._2 < kv._2) kv else max)
     maxKv._1
   }
 
   def extractWords[A](words: String)(f: Traversable[String] => A): A = f(words.split(" "))
-
-  println(commonest("damn yo damn yo yo"))
 }

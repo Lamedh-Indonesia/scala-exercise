@@ -1,0 +1,109 @@
+
+** TODO Generic queue
+Use a trait to define a generic queue of strings with 'put' and 'get' methods, and create a class that implements it using an array. Include tests.
+** TODO Reversif queue
+Starting from the previous exercise, use a stackable trait to modify the behavior of 'put' so it reverses each string before
+adding it to the queue. Include tests.
+** TODO Double comparer
+Write the ~= operator for comparing doubles. The operator should return true iff 2 doubles are equal up to a small constant.
+The constant should be configurable but also have a default. Include tests.
+** TODO GCD
+Implement GCD in Scala (hint: use pattern matching and tail recursion)
+** TODO Measure time
+Write a clause that measures the run time of a block of code and prints it (also needs to return the original output of the block):
+#+BEGIN_SRC Scala
+ timeit {
+   …
+   …
+ }
+#+END_SRC
+** TODO String commons [0/4]
+Given a string containing words separated by space, find:
+- [ ] The longest word
+- [ ] The most common word
+- [ ] The most common letter
+- [ ] Create a map from letter to a set of words it appear in
+** TODO List of strings convert
+Convert a list of strings to a list of all the characters in all the strings
+** TODO Set implementations
+Given the following code:
+#+BEGIN_SRC Scala
+ trait IntSet {
+       def incl(x: Int): IntSet
+       def contains(x: Int): Boolean
+ }
+ class EmptySet extends IntSet {
+       def contains(x: Int): Boolean = false
+       def incl(x: Int): IntSet = new NonEmptySet(x, new EmptySet, new EmptySet)
+ }
+ class NonEmptySet(elem: Int, left: IntSet, right: IntSet) extends IntSet {
+       def contains(x: Int): Boolean =
+               if (x < elem) left contains x
+               else if (x > elem) right contains x
+               else true
+       def incl(x: Int): IntSet =
+               if (x < elem) new NonEmptySet(elem, left incl x, right)
+               else if (x > elem) new NonEmptySet(elem, left, right incl x)
+               else this
+ }
+#+END_SRC
+Write methods union and intersection to form the union and intersection between two sets. Add a method
+ def excl(x: Int)
+to return the given set without the element x. To accomplish this, it is useful to also implement a test method
+ def isEmpty: Boolean
+for sets.
+
+** TODO IntTree's implementations
+Consider the following definitions representing trees of integers. These definitions can be seen as an alternative representation of IntSet:
+#+BEGIN_SRC Scala
+ abstract class IntTree
+ case object EmptyTree extends IntTree
+ case class Node(elem: Int, left: IntTree, right: IntTree) extends IntTree
+#+END_SRC
+Complete the following implementations of function contains and insert for IntTree’s.
+#+BEGIN_SRC Scala
+ def contains(t: IntTree, v: Int): Boolean = t match { ...
+       ...
+ }
+ def insert(t: IntTree, v: Int): IntTree = t match { ...
+       ...
+ }
+#+END_SRC
+** TODO Square list
+Consider a function which squares all elements of a list and returns a list with the results. Complete the following two equivalent definitions of squareList.
+#+BEGIN_SRC Scala
+ def squareList(xs: List[Int]): List[Int] = xs match {
+       case List() => ??
+       case y :: ys => ??
+ }
+ def squareList(xs: List[Int]): List[Int] =
+       xs map ??
+#+END_SRC
+** TODO First non-None optional
+Write a function that gets an optional x,y and z and returns the first that is not None
+
+** TODO List and map multiplication
+Given a list:List[Int] and map:Map[Int, Double], multiply all the numbers in the list with their corresponding value in the map, and drop if don't exists
+for example: list = [1,2,3,4], map = {1 -> 3, 3-> 5} ==> res = [3, 15]
+
+** TODO Retry
+Write a retry method that converts a method to a retry-able method.
+the syntax should look like:
+#+BEGIN_SRC Scala
+ retry { ... }
+#+END_SRC
+However, you also need some way to specify how many times to retry and support sleep between retries (hint: implicit arguments)
+
+** TODO Vector of numbers
+design a class that is given a vector of numbers in the constructor and exposes:
+x: a vector with the square of all elements in the input vector
+y: the sum of x
+z: the square root of y
+nothing should be calculated in the constructor of the class assume the calculation of x,y,z can take a lot of time, and should only be done once (at most)
+
+** TODO Median
+Add a method "median" to a Seq of integers so that s.median is the media of s for s of type Seq[Int]
+How can you add the same method for a sequence of doubles with minimal code duplication?
+
+** TODO ScalaLab exercises
+Basic scalalab exercises https://github.com/scala-labs/scala-labs/tree/master/labs/src/test/scala/org/scalalabs/basic

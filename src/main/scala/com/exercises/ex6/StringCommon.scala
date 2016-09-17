@@ -1,34 +1,29 @@
-package com.exercises.ex6
+package com.exercises.ex6ex7
 
 import scala.util.Try
 
+object StringCommon {
 
-object StringCommon extends App {
+  def longest(words: String) = (splitWords _ andThen FromArray.longest _)(words)
+  def commonestWord(words: String) = (splitWords _ andThen FromArray.commonestWord _)(words)
+  def commonestLetter(words: String) = (splitWords _ andThen FromArray.commonestLetter _)(words)
 
-  object FromString {
-    def longest(words: String) = extractWords(words)(FromTraversable.longest)
-    def commonestWord(words: String) = extractWords(words)(FromTraversable.commonestWord)
-    def commonestLetter(words: String) = extractWords(words)(FromTraversable.commonestLetter)
+  object FromArray {
+    def longest(words: Array[String]) = words.foldLeft("")((max, w) => if (max < w) w else max)
+    def commonestWord(words: Array[String]) = commonestItem("")(words)
+    def commonestLetter(words: Array[String]) = (wordsToChars _ andThen commonestItem(' '))(words)
   }
 
-  object FromTraversable {
-    def longest(words: Traversable[String]) =
-      words.foldLeft(0)((max, w) => if (max < w.length) w.length else max)
-
-    def commonestWord(words: Traversable[String]) = commonestItem("")(words)
-
-    def commonestLetter(words: Traversable[String]) =
-      commonestItem(' ')(words.flatMap(w => w.map(c => c)))
-  }
+  def wordsToChars(words: Traversable[String]) = words flatMap (w => w.map(c => c))
 
   def commonestItem[E](zero: E)(items: Traversable[E]) = {
     val hist = items.foldLeft(Map[E, Int]())((map, w) => {
-                                               val n = Try(map(w)).getOrElse(0)
-                                               map + (w -> (n + 1))
-                                             })
+        val n = Try(map(w)) getOrElse 0
+        map + (w -> (n + 1))
+      })
     val maxKv = hist.foldLeft(zero -> 0)((max , kv) => if (max._2 < kv._2) kv else max)
     maxKv._1
   }
 
-  def extractWords[A](words: String)(f: Traversable[String] => A): A = f(words.split(" "))
+  def splitWords(words: String) = words.split(" ")
 }

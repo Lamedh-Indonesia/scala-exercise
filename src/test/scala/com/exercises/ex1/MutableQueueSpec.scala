@@ -9,7 +9,7 @@ class MutableQueueSpec extends FunSpec
     val queue = new MutableQueueArray[String]()
 
     it("implement MutableQueue trait") {
-      queue shouldBe a [MutableQueue[String]]
+      queue shouldBe a [MutableQueue[_]]
     }
 
     it("get from empty queue should return None") {

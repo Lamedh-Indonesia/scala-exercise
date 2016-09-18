@@ -1,4 +1,4 @@
-package com.exercises.ex8
+package com.exercises.ex7
 
 trait IntSet {
   def isEmpty: Boolean
@@ -18,7 +18,7 @@ object EmptySet extends IntSet {
   def union(other: IntSet) = other
   def intersect(other: IntSet) = EmptySet
 
-  override def toString = "()"
+  override def toString = "."
 }
 
 class NonEmptySet(val elem: Int, val left: IntSet, val right: IntSet) extends IntSet {
@@ -43,16 +43,15 @@ class NonEmptySet(val elem: Int, val left: IntSet, val right: IntSet) extends In
   def union(other: IntSet) = ((left union other) union right) incl elem 
 
   def intersect(other: IntSet) = {
-    println(s"$elem intersect")
     val sub = ((left intersect other) union (right intersect other))
     if (!other.isEmpty) {
       val otherNonEmpty = other.asInstanceOf[NonEmptySet]
       val otherSub = ((otherNonEmpty.left intersect this) union (otherNonEmpty.right intersect this))
       val union = sub union otherSub
-      if (elem == otherNonEmpty.elem) union.incl(elem) else union
+      if (elem == otherNonEmpty.elem) union incl elem  else union
     }
     else sub
   }
 
-  override def toString = s"(${left.toString}, $elem, ${right.toString})"
+  override def toString = s"(${left.toString}$elem${right.toString})"
 }

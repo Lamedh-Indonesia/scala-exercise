@@ -1,4 +1,4 @@
-package com.exercises.ex6ex7
+package com.exercises.ex6
 
 import org.scalatest.{ FunSpec, GivenWhenThen, Matchers }
 

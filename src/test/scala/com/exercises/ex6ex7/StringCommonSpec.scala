@@ -18,6 +18,9 @@ class StringCommonSpec extends FunSpec with Matchers with GivenWhenThen {
     it("commonest letter is '1'") {
       StringCommon.commonestLetter(words) should be ('1')
     }
-  }
 
+    it("array of characters should be 1231234112123") {
+      StringCommon.wordsToChars(words.split(" ")).take(4) should be (Array('1', '2', '3', '1'))
+    }
+  }
 }

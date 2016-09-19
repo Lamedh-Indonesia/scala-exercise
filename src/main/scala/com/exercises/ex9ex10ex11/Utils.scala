@@ -8,7 +8,7 @@ object Utils {
     case x :: xs => (x * x) :: squareList(xs)
   }
 
-  def squareListMap(list: List[Int]): List[Int] = list map (n => n * n)
+  def squareListMap(list: Seq[Int]): Seq[Int] = list map (n => n * n)
 
   def firstNonEmpty[A](a: Option[A], b: Option[A], c: Option[A]) =
     a.getOrElse(b.getOrElse(c.getOrElse(None)))
